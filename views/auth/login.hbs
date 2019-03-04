@@ -1,0 +1,19 @@
+<link rel="stylesheet" href="../stylesheets/login.css">
+
+<div class="login-container">
+    <h1>Login</h1>
+    <form id="login-form" action="/auth/login" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username">
+        <label for="password">Password:</label>
+        <input type="password" name="password">
+        <a class="link">Show password</a>
+        <div class="alerts">
+            {{#each  messages}}
+                <p style="color: red">{{this}}</p>
+            {{/each}}
+        </div>
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a class="link" href="/auth/signup">Signup</a></p>
+    </form>
+</div>
