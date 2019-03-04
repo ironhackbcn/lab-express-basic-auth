@@ -4,8 +4,14 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const flash = require('connect-flash');
+const hbs = require('hbs');
 
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 const app = express();
 
@@ -13,6 +19,26 @@ mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE
+});
+
+app.use(session({
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  }),
+  secret: 'some-string',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  app.locals.currentUser = req.session.currentUser;
+  next();
 });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -25,6 +51,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
 
 // -- 404 and error handler
 
