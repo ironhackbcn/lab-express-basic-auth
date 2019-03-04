@@ -7,7 +7,8 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
+const signupRouter = require('./routes/signup');
+const loginRouter = require('./routes/login');
 const flash = require('connect-flash');
 const hbs = require('hbs');
 
@@ -45,7 +46,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 hbs.registerPartials(path.join(__dirname, '/views/partials'));
 
 app.use('/', indexRouter);
-app.use('/auth', authRouter);
+app.use('/auth', signupRouter);
+app.use('/auth', loginRouter);
 
 // -- 404 and error handler
 

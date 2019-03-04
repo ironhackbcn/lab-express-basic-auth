@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-const { requireAnon, requireUser, requireFields } = require('../middlewares/auth');
+const { requireAnon, requireFields } = require('../middlewares/auth');
 
 router.get('/signup', requireAnon, (req, res, next) => {
   const data = {
