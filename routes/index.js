@@ -9,7 +9,7 @@ const saltRounds = 10
 
 /* GET home page. */
 router.get('/main', requireUser, (req, res, next) => {
-  res.render('index', { title: 'Express' })
+  res.render('main', { title: 'Express' })
 })
 
 router.get('/private', requireUser, (req, res, next) => {

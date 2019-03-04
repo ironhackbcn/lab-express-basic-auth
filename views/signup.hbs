@@ -1,3 +1,5 @@
+
+<div class="form">
 <h1>Sign up</h1>
 
 <form method="POST" action="/">
@@ -11,7 +13,7 @@
     <label>Password</label>
     <input type="password" name="password"/>
   </div>
-
+{{> flash}}
   <div class="field submit">
     <button type="submit">Sign up</button>
   </div>
@@ -19,4 +21,5 @@
 
 <p>Already have an account? <a href="/login">Log in</a></p>
 
-{{> flash}}
+
+</div>

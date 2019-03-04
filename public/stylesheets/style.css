@@ -1,10 +1,14 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: rgb(153, 153, 153);
+  display: flex;
+  justify-content: center;
 }
 
 a {
   color: #00B7FF;
+  text-align: center;
 }
 
 
@@ -25,6 +29,7 @@ form label {
 form input {
   padding: 5px;
   font-size: 16px;
+ 
 }
 
 form .submit {
@@ -32,7 +37,17 @@ form .submit {
 }
 
 form .submit button {
-  padding: 5px 20px;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16px;
+  background-color: #27afdc;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.logout-button{
+  padding: 10px 20px;
   text-align: center;
   font-size: 16px;
   background-color: #27afdc;
@@ -51,4 +66,39 @@ form .field.has-error label {
 }
 form .field.has-error input {
 	border: 1px solid  red;
+}
+
+.form{
+  display:grid;
+  justify-content: center;
+  background-color: rgb(238, 238, 238);
+  width: 33%;
+  padding: 30px;
+  border: 1px solid rgb(134, 134, 134);
+  border-radius: 10px;
+}
+
+h1, label{
+  text-align: center;
+}
+
+.submit{
+  display: flex;
+  justify-content: center;
+}
+
+ul{
+  list-style: none;
+  padding: 0;
+}
+
+li{
+  text-align: center;
+}
+
+main{
+  background-color: rgb(238, 238, 238);
+  padding: 50px;
+  text-align: center;
+  width: 100%;
 }
