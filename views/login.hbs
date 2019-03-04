@@ -1,0 +1,35 @@
+{{!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="strength.js"></script>
+<script type="text/javascript" src="js.js"></script> --}}
+<div class="form">
+<h1>Log in</h1>
+
+<form method="POST" action="/login">
+
+  <div class="field" >
+    <label>Username</label>
+    <input type="text" name="username"/>
+  </div>
+
+  <div class="field" >
+    <label>Password</label>
+    <input type="password" name="password" id="myPassword"/>
+  </div>
+{{> flash}}
+  <div class="field submit">
+    <button type="submit">Log in</button>
+  </div>
+</form>
+
+<a href="/">Create an account</a>
+</div>
+{{!-- <script>
+$(document).ready(function ($) {
+
+    $("#myPassword").strength();
+
+});
+</script> --}}
+
+
+
