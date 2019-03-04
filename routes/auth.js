@@ -13,7 +13,10 @@ router.get('/signup', (req, res, next) => {
     res.redirect('/');
     return;
   }
-  res.render('auth/signup');
+  const data = {
+    messages: req.flash('validation')
+  };
+  res.render('auth/signup', data);
 });
 
 router.post('/signup', async (req, res, next) => {
@@ -26,13 +29,15 @@ router.post('/signup', async (req, res, next) => {
   const { username, password } = req.body;
   // Comprabar que user name y password existen.
   if (!password || !username) {
-    res.redirect('/auth/signup');
+    req.flash('validation', 'Username or password missing');
+    res.redirect('/auth' + req.path);
     return;
   }
   // Comprobar que el usuario no existe en la base de datos.
   try {
     const result = await User.findOne({ username });
     if (result) {
+      req.flash('validation', 'This username is taken');
       res.redirect('/auth/signup');
       return;
     }

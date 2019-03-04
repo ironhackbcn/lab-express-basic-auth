@@ -11,6 +11,8 @@ const authRouter = require('./routes/auth');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
+const flash = require('connect-flash');
+
 const app = express();
 
 app.use(session({
@@ -25,6 +27,8 @@ app.use(session({
     maxAge: 24 * 60 * 60 * 1000
   }
 }));
+
+app.use(flash());
 
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
