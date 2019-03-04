@@ -5,6 +5,10 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
 
+const { requireAnonymus, requireLogin, requireFields } = require('../middlewares/auth');
+
+// const requireAnon = require('../middlewares/auth');
+
 router.get('/', (req, res, next) => {
   res.render('index');
 });
@@ -13,7 +17,7 @@ router.get('/', (req, res, next) => {
 const saltRounds = 10;
 
 // Sing Up form
-router.get('/auth/signup', (req, res, next) => {
+router.get('/auth/signup', requireAnonymus, (req, res, next) => {
   // Flash message
   const message = {
     messages: req.flash('FormValidation')
@@ -21,15 +25,9 @@ router.get('/auth/signup', (req, res, next) => {
   res.render('auth/signup', message);
 });
 
-router.post('/auth/signup', async (req, res, next) => {
+router.post('/auth/signup', requireAnonymus, requireFields, async (req, res, next) => {
   // Fields from form
   const { username, password } = req.body;
-  // Check if password and username fields are empty
-  if (!password || !username) {
-    // Flash message
-    req.flash('FormValidation', 'Username and Password required!');
-    return res.redirect('/auth/signup');
-  }
   try {
     // Check if user exist
     const userExist = await User.findOne({ username });
@@ -55,22 +53,16 @@ router.post('/auth/signup', async (req, res, next) => {
 });
 
 // Login form
-router.get('/auth/login', (req, res, next) => {
+router.get('/auth/login', requireAnonymus, (req, res, next) => {
   const message = {
     messages: req.flash('FormValidation')
   };
   res.render('auth/login', message);
 });
 
-router.post('/auth/login', async (req, res, next) => {
+router.post('/auth/login', requireAnonymus, requireFields, async (req, res, next) => {
   // Fields from form
   const { username, password } = req.body;
-  // Check if password and username fields are empty
-  if (!password || !username) {
-    // Flash message
-    req.flash('FormValidation', 'Username and Password required!');
-    return res.redirect('/auth/login');
-  }
   try {
     // Check if user exist
     const userExist = await User.findOne({ username });
@@ -84,7 +76,6 @@ router.post('/auth/login', async (req, res, next) => {
       // Save the user 'userExist' in the server session
       req.session.currentUser = userExist; // **doubt**
       res.redirect('/');
-      console.log(`Login as ${userExist.username}`);
     } else {
       // Flash message
       req.flash('FormValidation', 'Password incorrect');
@@ -96,9 +87,29 @@ router.post('/auth/login', async (req, res, next) => {
 });
 
 // Logout
-router.post('/auth/logout', (req, res, next) => {
+router.post('/auth/logout', requireLogin, (req, res, next) => {
   delete req.session.currentUser;
   res.redirect('/');
+});
+
+// Protected Route
+router.get('/main', (req, res, next) => {
+  if (req.session.currentUser) {
+    return res.redirect('/auth/private');
+  }
+  return res.redirect('/');
+});
+
+// Protected Route
+router.get('/private', (req, res, next) => {
+  if (req.session.currentUser) {
+    return res.redirect('/auth/private');
+  }
+  return res.redirect('/');
+});
+
+router.get('/auth/private', (req, res, next) => {
+  res.render('auth/private');
 });
 
 module.exports = router;
