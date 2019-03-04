@@ -8,7 +8,19 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-
+  <nav>
+    {{#if currentUser}}  {{!-- **doubt** --}}
+    <div>
+      <p>Welcome {{currentUser.username}}</p>
+      <form action="/auth/logout" method="POST">
+        <button type="submit">Log out</button>
+      </form>
+    </div>
+    {{else}}
+      <a href="/auth/signup">Sign Up</a>
+      <a href="/auth/login">Login</a>/
+    {{/if}}
+  </nav>
   {{{body}}}
 
   <script src="/javascripts/script.js"></script>

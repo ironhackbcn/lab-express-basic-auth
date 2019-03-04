@@ -95,4 +95,10 @@ router.post('/auth/login', async (req, res, next) => {
   }
 });
 
+// Logout
+router.post('/auth/logout', (req, res, next) => {
+  delete req.session.currentUser;
+  res.redirect('/');
+});
+
 module.exports = router;
