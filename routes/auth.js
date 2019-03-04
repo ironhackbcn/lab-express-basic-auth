@@ -54,4 +54,54 @@ router.post('/signup', async (req, res, next) => {
   res.render('auth/signup');
 });
 
+router.get('/login', (req, res, next) => {
+  if (req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  res.render('auth/login');
+});
+
+router.post('/login', async (req, res, next) => {
+  if (req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  // Extraer informacion del body
+  const { username, password } = req.body;
+  // Comprobar que hay usuario y password
+  if (!password || !username) {
+    res.redirect('/auth/login');
+    return;
+  }
+  try {
+  // Comprobar que el usuario existe en la db
+    const user = await User.findOne({ username });
+    if (!user) {
+      res.redirect('/auth/login');
+      return;
+    }
+    // Comparar la contrasena
+    if (bcrypt.compareSync(password, user.password)) {
+      // Guardar la sesion
+      req.session.currentUser = user;
+      // Redirigir
+      res.redirect('/');
+    } else {
+      res.redirect('/auth/login');
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/logout', (req, res, next) => {
+  if (!req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  delete req.session.currentUser;
+  res.redirect('/');
+});
+
 module.exports = router;
