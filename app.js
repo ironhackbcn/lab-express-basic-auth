@@ -5,9 +5,33 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 
+// Session
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+// Flash
+const flash = require('connect-flash');
+
 const indexRouter = require('./routes/index');
 
 const app = express();
+
+// Session
+app.use(session({
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  }),
+  secret: 'some-string',
+  resave: true,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  }
+}));
+
+// After the session middleware add the flash middleware
+app.use(flash());
 
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
@@ -23,6 +47,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Makes the currentUser available in every page
+// note1: currentUser needs to match whatever you use in login/signup/logout routes
+app.use((req, res, next) => {
+  app.locals.currentUser = req.session.currentUser;
+  next();
+});
 
 app.use('/', indexRouter);
 
