@@ -1,0 +1,22 @@
+<h1>Sign up</h1>
+
+<form method="POST" action="/">
+
+  <div class="field" >
+    <label>Username</label>
+    <input type="text" name="username"/>
+  </div>
+
+  <div class="field" >
+    <label>Password</label>
+    <input type="password" name="password"/>
+  </div>
+
+  <div class="field submit">
+    <button type="submit">Sign up</button>
+  </div>
+</form>
+
+<p>Already have an account? <a href="/login">Log in</a></p>
+
+{{> flash}}
