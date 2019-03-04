@@ -8,7 +8,7 @@ const saltRounds = 10;
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Iron Authentication' });
 });
 
 // sign up
@@ -69,6 +69,21 @@ router.post('/login', async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+});
+
+// ruta a la página del gato, una vez autentificado
+router.get('/cat', (req, res, next) => {
+  res.render('auth/cat');
+});
+
+// logout
+router.post('/logout', async (req, res, next) => {
+  if (!req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  delete req.session.currentUser;
+  res.redirect('/');
 });
 
 module.exports = router;

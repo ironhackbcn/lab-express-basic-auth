@@ -8,6 +8,24 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
+  <nav>
+    {{#if currentUser}}
+    <div>
+    {{currentUser.username}}
+    
+      <form action="/cat" method="GET">
+        <button type="submit">Cat</button>
+      </form>
+
+      <form action="/logout" method="POST">
+        <button type="submit">LogOut</button>
+      </form>
+    </div>
+    {{else}}
+      <a href="/signup">SignUp</a>
+      <a href="/login">LogIn</a>
+    {{/if}}
+  </nav>
 
   {{{body}}}
 
