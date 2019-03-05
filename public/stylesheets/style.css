@@ -6,3 +6,99 @@ body {
 a {
   color: #00B7FF;
 }
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40px;
+  background: rgb(179, 179, 223);
+  font-size: 1.5em;
+  padding-right: 30px;
+}
+
+.header a {
+  text-decoration: none;
+  color: black;
+  margin-right: 20px;
+}
+
+.header a:hover {
+  color: rgb(95, 99, 95);
+}
+
+.header-auth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center; 
+  height: 40px;
+  width: 100%;
+  background: rgb(179, 179, 223);
+  padding-right: 30px;
+}
+
+.header-auth .username {
+  margin-left: 30px;
+}
+
+.header-auth .form {
+  display: flex;
+  flex-direction: row; 
+}
+
+.header-auth .form form {
+  padding-right: 30px;
+}
+
+.header-auth .form button {
+  border-radius: 3px;
+  background: rgb(170, 170, 132);
+  font-weight: bold;
+}
+
+/* -- forms -- */
+
+form.is-processing {
+	opacity: 0.5;
+}
+
+form .field {
+	margin-bottom: 20px;
+}
+
+form label {
+	display: block;
+	margin-bottom: 10px;
+	font-style: bold;
+}
+
+form input {
+  padding: 5px;
+  font-size: 16px;
+}
+
+form .submit {
+  padding-top: 20px;
+}
+
+form .submit button {
+  padding: 5px 20px;
+  text-align: center;
+  font-size: 16px;
+  background-color: #27afdc;
+  cursor: pointer;
+}
+
+form .validation {
+  margin: 5px 0 10px;
+  color: red;
+}
+
+form .field.has-error label {
+	color: red;
+}
+form .field.has-error input {
+	border: 1px solid  red;
+}

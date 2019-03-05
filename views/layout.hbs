@@ -8,6 +8,28 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
+  <nav class="header">
+    {{#if currentUser}}
+    <div class="header-auth">
+      <div class="username">
+        <p>username: {{currentUser.username}}</p>
+      </div>
+
+      <div class="form">
+        <form action="/cat" method="GET">
+          <button type="submit">Cat</button>
+        </form>
+
+        <form action="/logout" method="POST">
+          <button type="submit">LogOut</button>
+        </form>
+      </div>
+    </div>
+    {{else}}
+      <a href="/signup">SignUp</a>
+      <a href="/login">LogIn</a>
+    {{/if}}
+  </nav>
 
   {{{body}}}
 
