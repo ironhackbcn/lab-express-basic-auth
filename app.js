@@ -13,6 +13,8 @@ const MongoStore = require('connect-mongo')(session);
 
 const flash = require('connect-flash');
 
+const hbs = require('hbs');
+
 const app = express();
 
 app.use(session({

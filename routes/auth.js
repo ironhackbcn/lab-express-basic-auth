@@ -61,4 +61,67 @@ router.post('/signup', async (req, res, next) => {
   }
 });
 
+router.get('/login', async (req, res, next) => {
+  // Lo siguiente mira si hay un usuario ya logueado y si lo hay no te permite acceder al login
+  if (req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  // Lo siguiente (const data) es para que dependiendo de donde falle al loguearme me muestre un mensage.
+  const data = {
+    messages: req.flash('validation')
+  };
+  res.render('auth/login', data);
+});
+
+router.post('/login', async (req, res, next) => {
+  if (req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  // Extraer la información del body.
+  const { username, password } = req.body;
+  // Esto de aquí abajo lo podemos eleminar o comentar porque hemos creado la middleware requireFields
+  // Comprobar que hay usuario y password.
+  if (!password || !username) {
+    res.redirect('/auth/login');
+    return;
+  }
+  try {
+    // Comprobar que el usuario existe.
+    const user = await User.findOne({ username });
+    if (!user) {
+      req.flash('validation', 'Username or password incorrect');
+      res.redirect('/auth/login');
+      return;
+    }
+    // Comparar la contraseña.
+    if (bcrypt.compareSync(password, user.password)) {
+      // Save the login in the session!
+      req.session.currentUser = user;
+      // Redirigir
+      res.redirect('/');
+    } else {
+      // aquí enseñamos el error si la contraseña está equivocada.
+      req.flash('validation', 'Username or password incorrect');
+
+      res.redirect('/auth/login');
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post('/logout', (req, res, next) => {
+  // Esto de aquí abajo lo podemos eleminar o comentar porque hemos creado la middleware requireFields
+  // si no estás logeado no podras hacer el logout.
+  if (!req.session.currentUser) {
+    res.redirect('/');
+    return;
+  }
+  delete req.session.currentUser;
+
+  res.redirect('/');
+});
+
 module.exports = router;
