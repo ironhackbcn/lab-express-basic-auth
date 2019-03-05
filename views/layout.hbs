@@ -12,6 +12,8 @@
     {{#if currentUser}}
     <div>
       <p>{{currentUser.username}}</p>
+      <a href="/auth/main">main</a>
+      <a href="/auth/private">private</a>
       <form action="/auth/logout" method="POST">
         <button type="submit">Logout</button>
       </form>

@@ -44,5 +44,50 @@ router.post('/signup', requireAnon, requireFields, async (req, res, next) => {
     next(error);
   }
 });
+// --------------Login----------------------------------
+router.get('/login', requireAnon, (req, res, next) => {
+  const data = {
+    messages: req.flash('validation')
+  };
+  res.render('auth/login', data);
+});
 
+router.post('/login', requireAnon, requireFields, async (req, res, next) => {
+  // Extraer informacion del body
+  const { username, password } = req.body;
+  // comprobar que el usuario no existe
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      req.flash('validation', 'The username or password incorrect');
+      res.redirect('/auth/login');
+      return;
+    }
+    // comparar la contraseña
+    if (bcrypt.compareSync(password, user.password)) {
+      // Save the login in the session!
+      req.session.currentUser = user;
+      res.redirect('/');
+    } else {
+      req.flash('validation', 'The username or password incorrect');
+      res.redirect('/auth/login');
+    }
+  } catch (error) {
+    next(error);
+  }
+});
+// ---------------------Logout------------------//
+router.post('/logout', requireUser, async (req, res, next) => {
+  delete req.session.currentUser;
+  res.redirect('/');
+});
+
+// ---------------------Main--------------------//
+router.get('/main', requireUser, (req, res, next) => {
+  res.render('auth/main');
+});
+// ---------------------Private--------------------//
+router.get('/private', requireUser, (req, res, next) => {
+  res.render('auth/private');
+});
 module.exports = router;
