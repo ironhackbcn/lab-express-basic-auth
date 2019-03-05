@@ -27,3 +27,5 @@ module.exports = {
     next();
   }
 };
+
+// **doubt** 'syntax module.exports'

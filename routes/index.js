@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 const User = require('../models/User');
 
-const { requireAnonymus, requireLogin, requireFields } = require('../middlewares/auth');
+const { requireAnonymus, requireLogin, requireFields } = require('../middlewares/auth'); // **doubt**
 
 // const requireAnon = require('../middlewares/auth');
 
@@ -44,7 +44,7 @@ router.post('/auth/signup', requireAnonymus, requireFields, async (req, res, nex
     // Insert user with hashed password
     const createUserWithHashedPassword = await User.create(userWithHashedPassword);
     // Save user 'createUserWithHashedPassword' in server sesion
-    req.session.currentUser = createUserWithHashedPassword; // **doubt**
+    req.session.currentUser = createUserWithHashedPassword;
     // Redirect at home
     return res.redirect('/');
   } catch (error) {
@@ -74,7 +74,7 @@ router.post('/auth/login', requireAnonymus, requireFields, async (req, res, next
     // Check if the password is the same between: form password VS user password in DB
     if (bcrypt.compareSync(password, userExist.password)) {
       // Save the user 'userExist' in the server session
-      req.session.currentUser = userExist; // **doubt**
+      req.session.currentUser = userExist;
       res.redirect('/');
     } else {
       // Flash message
