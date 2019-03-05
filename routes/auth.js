@@ -61,7 +61,7 @@ router.post('/signup', async (req, res, next) => {
   }
 });
 
-router.get('/login', async (req, res, next) => {
+router.get('/login', (req, res, next) => {
   // Lo siguiente mira si hay un usuario ya logueado y si lo hay no te permite acceder al login
   if (req.session.currentUser) {
     res.redirect('/');
@@ -84,7 +84,8 @@ router.post('/login', async (req, res, next) => {
   // Esto de aquí abajo lo podemos eleminar o comentar porque hemos creado la middleware requireFields
   // Comprobar que hay usuario y password.
   if (!password || !username) {
-    res.redirect('/auth/login');
+    req.flash('validation', 'Username or password missing');
+    res.redirect('/auth' + req.path);
     return;
   }
   try {
