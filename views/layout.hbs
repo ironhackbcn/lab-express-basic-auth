@@ -8,18 +8,22 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-  <nav>
+  <nav class="header">
     {{#if currentUser}}
-    <div>
-    {{currentUser.username}}
-    
-      <form action="/cat" method="GET">
-        <button type="submit">Cat</button>
-      </form>
+    <div class="header-auth">
+      <div class="username">
+        <p>username: {{currentUser.username}}</p>
+      </div>
 
-      <form action="/logout" method="POST">
-        <button type="submit">LogOut</button>
-      </form>
+      <div class="form">
+        <form action="/cat" method="GET">
+          <button type="submit">Cat</button>
+        </form>
+
+        <form action="/logout" method="POST">
+          <button type="submit">LogOut</button>
+        </form>
+      </div>
     </div>
     {{else}}
       <a href="/signup">SignUp</a>

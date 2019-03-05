@@ -7,6 +7,57 @@ a {
   color: #00B7FF;
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  height: 40px;
+  background: rgb(179, 179, 223);
+  font-size: 1.5em;
+  padding-right: 30px;
+}
+
+.header a {
+  text-decoration: none;
+  color: black;
+  margin-right: 20px;
+}
+
+.header a:hover {
+  color: rgb(95, 99, 95);
+}
+
+.header-auth {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between; 
+  align-items: center; 
+  height: 40px;
+  width: 100%;
+  background: rgb(179, 179, 223);
+  padding-right: 30px;
+}
+
+.header-auth .username {
+  margin-left: 30px;
+}
+
+.header-auth .form {
+  display: flex;
+  flex-direction: row; 
+}
+
+.header-auth .form form {
+  padding-right: 30px;
+}
+
+.header-auth .form button {
+  border-radius: 3px;
+  background: rgb(170, 170, 132);
+  font-weight: bold;
+}
+
 /* -- forms -- */
 
 form.is-processing {
