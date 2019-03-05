@@ -4,13 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>{{title}}</title>
+  <title>First basic auth</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
 
+  <nav>
+    {{#if currentUser}}
+    <div>
+      <p>{{currentUser.username}}</p>
+      <form action="/auth/logout" method="POST">
+        <button type="submit">Logout</button>
+      </form>
+    </div>
+    {{else}}
+    <a href="/auth/signup">Signup</a>
+    <a href="/auth/login">Login</a>
+    {{/if}}
+  </nav>
+  
   {{{body}}}
 
-  <script src="/javascripts/script.js"></script>
+  </script>
 </body>
 </html>
