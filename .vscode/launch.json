@@ -3,11 +3,14 @@
   "configurations": [
     {
       "type": "node",
-      "request": "attach",
-      "name": "DEBUG Irongenerate",
-      "port": 9229,
-      "protocol": "inspector",
-      "restart": "true"
+      "request": "launch",
+      "name": "nodemon",
+      "runtimeExecutable": "nodemon",
+      "program": "${workspaceFolder}/bin/www",
+      "restart": true,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
     }
+    
   ]
 }
