@@ -16,6 +16,7 @@ router.get('/signup', requireAnon, (req, res, next) => {
 });
 
 router.post('/signup', requireAnon, requireFields, async (req, res, next) => {
+  // username y password que nos biene del body
   const { username, password } = req.body;
 
   try {

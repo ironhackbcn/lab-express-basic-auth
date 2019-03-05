@@ -29,7 +29,7 @@ router.post('/login', requireAnon, requireFields, async (req, res, next) => {
       res.redirect('/auth/login');
       return;
     }
-    // Comparar contrasena
+    // Comparar contraseña para ver si entramos a la sesion
     if (bcrypt.compareSync(password /* provided password */, user.password /* hashed password */)) {
       // Save the login in the session!
       req.session.currentUser = user;
