@@ -11,8 +11,27 @@
 
 <body>
 
-  {{{body}}}
-
+  <nav>
+    <ul>
+      <li><a href="/main">Main</a></li>
+      <li><a href="/private">Private</a></li>
+    </ul>
+    <ul>
+      {{#if user}}
+      <li>
+        <form action="/auth/logout" method="POST">
+          <button type="submit" class="btn-logout">{{user.username}} Logout</button>
+        </form>
+      </li>
+      {{else}}
+      <li><a href="/auth/signup">Sign up</a></li>
+      <li><a href="/auth/login">Login</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+  <div class="wrap">
+    {{{body}}}
+  </div>
   <script src="/javascripts/script.js"></script>
 </body>
 

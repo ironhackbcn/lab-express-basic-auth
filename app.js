@@ -10,6 +10,7 @@ const MongoStore = require('connect-mongo')(session);
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
+const contentRouter = require('./routes/content');
 const app = express();
 
 app.use(session({
@@ -48,6 +49,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/', contentRouter);
 app.use('/auth', authRouter);
 
 // -- 404 and error handler

@@ -4,10 +4,10 @@
     <h1>Signup</h1>
     <form id="signup-form" action="/auth/signup" method="POST">
         <label for="username">Username:</label>
-        <input type="text" name="username">
+        <input class="error" required type="text" name="username">
         <label for="password">Password:</label>
-        <input type="password" name="password">
-        <a class="link">Show password</a>
+        <input id="password" required type="password" name="password">
+        <a id="show-pw" class="link">Show password</a>
         <p id="password-strenght">Week</p>
         <div class="alerts">
             {{#each  messages}}
@@ -18,3 +18,5 @@
         <p>Already have an account? <a class="link" href="/auth/login">Login</a></p>
     </form>
 </div>
+
+<script src="/javascripts/show-pw.js"></script>

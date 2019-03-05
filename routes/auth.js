@@ -5,28 +5,17 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
-router.get('/signup', (req, res, next) => {
+const { requireUser, requireAnon, requireFields } = require('../middlewares/auth');
+
+router.get('/signup', requireAnon, (req, res, next) => {
     const validation = {
         messages: req.flash('validation')
     };
-    if (req.session.user) {
-        res.redirect('/');
-        return;
-    }
     res.render('auth/signup', validation);
 });
 
-router.post('/signup', async (req, res, next) => {
-    if (req.session.user) {
-        res.redirect('/');
-        return;
-    }
+router.post('/signup', requireAnon, requireFields, async (req, res, next) => {
     const { username, password } = req.body;
-    if (!username || !password) {
-        req.flash('validation', 'You must fill all fields.');
-        res.redirect('/auth' + req.path);
-        return;
-    }
     try {
         const user = await User.findOne({ username });
         if (user) {
@@ -48,28 +37,15 @@ router.post('/signup', async (req, res, next) => {
     }
 });
 
-router.get('/login', (req, res, next) => {
+router.get('/login', requireAnon, (req, res, next) => {
     const validation = {
         messages: req.flash('validation')
     };
-    if (req.session.user) {
-        res.redirect('/');
-        return;
-    }
     return res.render('auth/login', validation);
 });
 
-router.post('/login', async (req, res, next) => {
-    if (req.session.user) {
-        res.redirect('/');
-        return;
-    }
+router.post('/login', requireAnon, requireFields, async (req, res, next) => {
     const { username, password } = req.body;
-    if (!password || !username) {
-        req.flash('validation', 'Username or pw missing');
-        res.redirect('/auth' + req.path);
-        return;
-    }
     try {
         const newUser = await User.findOne({ username });
         if (!newUser) {
@@ -91,11 +67,9 @@ router.post('/login', async (req, res, next) => {
     }
 });
 
-router.post('/logout', (req, res, next) => {
-    if (req.session.user) {
-        delete req.session.user;
-        return res.redirect('/');
-    }
+router.post('/logout', requireUser, (req, res, next) => {
+    delete req.session.user;
+    return res.redirect('/');
 });
 
 module.exports = router;
