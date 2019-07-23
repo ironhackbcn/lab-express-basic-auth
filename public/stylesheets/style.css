@@ -6,3 +6,10 @@ body {
 a {
   color: #00B7FF;
 }
+
+ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  text-decoration: none;
+}
