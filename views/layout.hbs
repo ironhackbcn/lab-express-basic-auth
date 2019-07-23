@@ -8,7 +8,37 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-
+  <header>
+    <nav>
+      <ul>
+        <li>
+          <a href="/">Home</a>
+        </li>
+        {{#unless currentUser}}
+        <li>
+          <a href="/auth/signup">Sign up</a>
+        </li>
+        <li>
+          <a href="/auth/login">Log in</a>
+        </li>
+        {{/unless}}
+        
+        {{#if currentUser}}
+        <li>
+          <form action="/auth/logout" method="POST">
+          <button type="submit">Log out</button>
+          </form>
+        </li>
+        <li>
+          <a href="/users/private">Private</a>
+        </li>
+        <li>
+          <a href="/users/main">Main</a>
+        </li>
+        {{/if}}
+      </ul>
+    </nav>
+  </header>
   {{{body}}}
 
   <script src="/javascripts/script.js"></script>
