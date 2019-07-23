@@ -8,6 +8,18 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
+  <header>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/users/signup">Sign Up</a></li>
+        <li><a href="/users/login">Log in</a></li>
+        <li><form action="/users/logout" method="POST">
+          <button type="submit">Log out</button>
+        </form></li>
+      </ul>
+    </nav>
+  </header>
 
   {{{body}}}
 
