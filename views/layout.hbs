@@ -8,9 +8,34 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
-
+  <nav>
+    <ul>
+          <li>
+            <a href="/">Home</a>
+          </li>
+      {{#unless currentUser}}
+          <li>
+            <a href="/auth/signup">Sign Up</a>
+          </li>
+          <li>
+            <a href="/auth/login">Log In</a>
+          </li>
+      {{else}}
+          <li>
+            <a href="/private">Private Fun</a>
+          </li>
+          <li>
+            <a href="/main">Main Just For You</a>
+          </li>
+          <li>
+            <form action="/auth/logout" method="POST">
+              <button type="submit">LOG-OUT.</button>
+            </form>
+          </li>
+      {{/unless}}
+    </ul>
+  </nav>
   {{{body}}}
-
   <script src="/javascripts/script.js"></script>
 </body>
 </html>
