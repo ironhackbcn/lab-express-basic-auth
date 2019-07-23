@@ -8,6 +8,31 @@
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 <body>
+  <nav>
+    <ul>
+      <li>
+        <a href="/">Home</a>
+      </li>
+      {{#unless currentUser}}
+      <li>
+        <a href="/auth/signup">Signup</a>
+      </li>
+      <li>
+        <a href="/auth/login">Login</a>
+      </li>
+      {{/unless}}
+      {{#if currentUser}}
+      <li>
+        <form action="/auth/logout" method="POST">
+          <button type="submit">Logout</button>
+        </form>
+      </li>
+      <li>
+        <a href="/private-content">Private content</a>
+      </li>
+      {{/if}}
+    </ul>
+  </nav>
 
   {{{body}}}
 
