@@ -1,2 +1,13 @@
 <h1>{{title}}</h1>
 <p>Welcome to {{title}}</p>
+
+{{#unless currentUser}}
+
+<a href="/auth/signup">Sign Up</a> or
+<a href="/auth/login">Log In</a>
+
+{{/unless}}
+
+{{#if currentUser}}
+<p>Logged in as {{currentUser.username}}</p>
+{{/if}}
