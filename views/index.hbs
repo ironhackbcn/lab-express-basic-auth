@@ -1,2 +1,14 @@
 <h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<p>Welcome to {{Authentication}} page</p>
+<ul>
+  {{#if currentUser}}
+    <li>
+      <form action="/auth/logout" method="POST">
+        <button type="submit">Logout</button>
+      </form>
+    </li>
+  {{else}}
+    <li><a href="/auth/login">Login</a></li>
+    <li><a href="/auth/signup">Signup</a></li>
+  {{/if}}
+</ul>
