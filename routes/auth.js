@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
+// const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const { isLoggedIn, isNotLoggedIn, isFormFilled } = require('../Middlewares/authMiddlewares');
