@@ -1,0 +1,10 @@
+<h2>Private Page</h2>
+<p>Welcome {{currentUser.username}}!</p>
+<p>Created: {{currentUser.createdAt}}</p>
+{{#each recipes}}
+<p>{{title}}</p>
+<p>{{level}}</p>
+<p>{{cuisine}}</p>
+<p>{{duration}}</p>
+{{/each}}
+<a href="/recipes/create">Create Recipe</a>
