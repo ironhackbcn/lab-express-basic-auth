@@ -1,5 +1,7 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-unused-vars */
 const session = require('express-session');
-const mongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(session);
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
@@ -9,14 +11,14 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const indexRouter = require('./routes/index');
-const authRouter = require('/routes/authorization');
+const authRouter = require('./routes/auth-routes');
 
 const app = express();
 
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
   useNewUrlParser: true,
-  reconnectTries: Number.MAX_VALUE
+  reconnectTries: Number.MAX_VALUE,
 });
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -29,15 +31,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/',authRouter);
+app.use('/', authRouter);
 
 app.use(session({
-  secret: "basic-auth-secret",
+  secret: 'basic-auth-secret',
   cookie: { maxAge: 60000 },
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
-    ttl: 24 * 60 * 60 // 1 day
-  })
+    ttl: 24 * 60 * 60, // 1 day
+  }),
 }));
 
 // -- 404 and error handler
