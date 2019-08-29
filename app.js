@@ -1,11 +1,15 @@
+const session = require('express-session');
+const mongoStore = require('connect-mongo')(session);
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const indexRouter = require('./routes/index');
+const authRouter = require('/routes/authorization');
 
 const app = express();
 
@@ -25,6 +29,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/',authRouter);
+
+app.use(session({
+  secret: "basic-auth-secret",
+  cookie: { maxAge: 60000 },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
 
 // -- 404 and error handler
 
