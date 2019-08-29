@@ -7,10 +7,14 @@ const router = express.Router();
 
 const bcrypt = require('bcryptjs');
 
+const saltRounds = 10;
+
 const User = require('../models/user');
 
+const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');
 
-router.post('/login', (req, res, next) => {
+
+router.post('/login', isFFilled, (req, res, next) => {
   const theUsername = req.body.username;
   const thePassword = req.body.password;
 
@@ -43,5 +47,16 @@ router.post('/login', (req, res, next) => {
       next(error);
     });
 });
+
+router.post('/signin', isFFilled, (req, res, next) => { 
+  /* retrieves username and password */
+  const { username, password } = req.body;
+  /* use salt because remains resistant to brute-force attacks */
+  const salt = bcrypt.genSaltSync(saltRounds);
+  const hashPassword = bcrypt.hashSync(password, salt);
+  
+
+});
+
 
 module.exports = router;

@@ -4,6 +4,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const { isUserLoggedIn, isFFilled } = require('../MiddleWares/authMiddleWares');
+
 /* GET home page. */
 
 router.get('/login', (req, res, next) => {
