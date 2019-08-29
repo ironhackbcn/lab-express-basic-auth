@@ -8,6 +8,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+const loginRouter = require('./routes/login');
 
 const app = express();
 
@@ -35,7 +37,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/signup', authRouter);
+app.use('/login', loginRouter);
 app.use('/', indexRouter);
 
 // -- 404 and error handler
