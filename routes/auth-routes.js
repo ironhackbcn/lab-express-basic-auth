@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-console */
 /* eslint-disable eol-last */
 /* eslint-disable no-unused-vars */
 const express = require('express');
@@ -11,9 +12,7 @@ const saltRounds = 10;
 
 const User = require('../models/user');
 
-
-
-const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');+
+const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');
 
 router.get('/login', (req, res, next) => {
   console.log('load log in form');
@@ -32,9 +31,8 @@ router.post('/login', (req, res, next) => {
       .then((user) => {
         if (user) {
           if (bcrypt.compareSync(password, user.hashedPassword)) {
-          
             req.session.currentUser = user;
-            res.redirect('/private');
+            res.render('private');
           } else {
             // password invalido
             res.render('auth/login', { errorMessage: 'User Name or Password incorrect!!!' });
@@ -51,13 +49,14 @@ router.post('/login', (req, res, next) => {
   }
 });
 
-router.post('/signup', isFFilled, (req, res, next) => {
+router.post('/signup', (req, res, next) => {
   /* retrieves username and password */
   const { username, password } = req.body;
   /* use salt because remains resistant to brute-force attacks */
   if (username !== '' && password !== '') {
-    /* Beguin looking for if the user exist */
-    User.findOne({ username }) /* Try find a user if existe before creation*/
+  /* Beguin looking for if the user exist */
+    User.findOne({ username })
+    /* Try find a user if existe before creation */
       .then((user) => {
         if (user) {
           console.log('User Exist in database');
@@ -86,7 +85,22 @@ router.post('/signup', isFFilled, (req, res, next) => {
   }
 });
 
+router.get('/private', isUserLoggedIn, (req, res, next) => {
+  res.render('private');
+});
 
+router.get('/created', isUserLoggedIn, (req, res, next) => {
+  res.render('created');
+});
 
+router.get('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    // cannot access session here
+    if (err) {
+      next(err);
+    }
+    res.redirect('/login');
+  });
+});
 
 module.exports = router;

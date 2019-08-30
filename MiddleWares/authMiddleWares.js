@@ -1,15 +1,18 @@
-/* eslint-disable consistent-return */
 /* eslint-disable linebreak-style */
+/* eslint-disable no-console */
+/* eslint-disable consistent-return */
+
 const isUserLoggedIn = (req, res, next) => {
-  if (app.locals.currentUser) {
-    return res.redirect('private');
+  if (req.session.currentUser) {
+    next();
+  } else {
+    res.redirect('auth/login');
   }
-  next();
 };
 
 const isUserNoLoggedIn = (req, res, next) => {
-  if (!app.locals.currentUser) {
-    return res.redirect("auth/login");
+  if (!req.session.currentUser) {
+    return res.redirect('auth/login');
   }
   next();
 };
@@ -19,7 +22,7 @@ const isFFilled = (req, res, next) => {
   if (!uNam || !uPass) {
     return res.redirect(req.path);
   }
-  console.log ('espacios vacios');
+  console.log('Empty spaces');
   next();
 };
 
