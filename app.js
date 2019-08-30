@@ -20,6 +20,7 @@ mongoose.connect('mongodb://localhost/basic-auth', {
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
 });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -30,17 +31,38 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// app.use(session({
+//   secret: 'basic-auth-secret',
+//   cookie: { maxAge: 60000 },
+//   store: new MongoStore({
+//     mongooseConnection: mongoose.connection,
+//     ttl: 24 * 60 * 60, // 1 day
+//   }),
+// }));
+
+/*Improvement of the previous version*/
+app.use(
+  session({
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 24 * 60 * 60, // 1 day
+    }),
+    secret: 'ironhack',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+app.use((req, res, next) => {
+  app.locals.currentUser = req.session.currentUser;
+  next();
+});
+
+
 app.use('/', indexRouter);
 app.use('/', authRouter);
-
-app.use(session({
-  secret: 'basic-auth-secret',
-  cookie: { maxAge: 60000 },
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
-    ttl: 24 * 60 * 60, // 1 day
-  }),
-}));
 
 // -- 404 and error handler
 

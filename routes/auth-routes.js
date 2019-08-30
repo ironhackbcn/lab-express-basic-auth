@@ -11,71 +11,82 @@ const saltRounds = 10;
 
 const User = require('../models/user');
 
-const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');
 
 
-router.post('/login', isFFilled, (req, res, next) => {
-  const theUsername = req.body.username;
-  const thePassword = req.body.password;
+const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');+
 
-  // if (theUsername === '' || thePassword === '') {
-  //   res.render('login', {
-  //     errorMessage: 'Please enter both, username and password to login.',
-  //   });
-  //   return;
-  // }
-
-  User.findOne({ username: theUsername })
-    .then((user) => {
-      if (!user) {
-        res.render('auth/login', {
-          errorMessage: "The username doesn't exist.",
-        });
-        return;
-      }
-      if (bcrypt.compareSync(thePassword, user.password)) {
-        // Save the login in the session!
-        req.session.currentUser = user;
-        res.redirect('/');
-      } else {
-        res.render('login', {
-          errorMessage: 'Incorrect password',
-        });
-      }
-    })
-    .catch((error) => {
-      next(error);
-    });
+router.get('/login', (req, res, next) => {
+  console.log('load log in form');
+  res.render('auth/login');
 });
 
-router.post('/signin', isFFilled, (req, res, next) => {
+router.get('/signup', (req, res, next) => {
+  console.log('load sign up form');
+  res.render('auth/signup');
+});
+
+router.post('/login', (req, res, next) => {
+  const { username, password } = req.body;
+  if (username !== '' && password !== '') {
+    User.findOne({ username })
+      .then((user) => {
+        if (user) {
+          if (bcrypt.compareSync(password, user.hashedPassword)) {
+          
+            req.session.currentUser = user;
+            res.redirect('/private');
+          } else {
+            // password invalido
+            res.render('auth/login', { errorMessage: 'User Name or Password incorrect!!!' });
+          }
+        } else {
+          res.redirect('auth/signup');
+        }
+      })
+      .catch(() => {
+        res.render('auth/login', { errorMessage: 'Tray Again' });
+      });
+  } else {
+    res.render('auth/login', { errorMessage: 'Username and password fields cannot be empty' });
+  }
+});
+
+router.post('/signup', isFFilled, (req, res, next) => {
   /* retrieves username and password */
   const { username, password } = req.body;
   /* use salt because remains resistant to brute-force attacks */
   if (username !== '' && password !== '') {
     /* Beguin looking for if the user exist */
-    User.findOne({ username })
+    User.findOne({ username }) /* Try find a user if existe before creation*/
       .then((user) => {
         if (user) {
           console.log('User Exist in database');
-          res.render('signup',{ errorMessage: 'User already exists'})
-        }
-        else {
-          console.log(`User doesn't no exist!!! I'm going to create one`);
-          /* Here we hash de password and begin with layers salt*/
+          res.render('auth/signup', { errorMessage: 'User already exists try with another username' });
+        } else {
+          console.log('User doesn\'t no exist!!! I\'m going to create one');
+          /* Here we hash de password and begin with layers salt */
           const salt = bcrypt.genSaltSync(saltRounds);
           const hashedPassword = bcrypt.hashSync(password, salt);
+          /* Create de user because is allright */
+          User.create({ username, hashedPassword })
+            .then(() => {
+              console.log(`User ${username} created`);
+              res.redirect('../created');
+            })
+            .catch((error) => {
+              throw (error);
+            });
         }
-      })
-      .catch((error)) => {
-
-      }
+      }) /* Here receive a posible error of the other catch */
+      .catch((error) => {
+        res.render('signup', { erroMessage: 'Error Tray again!!!' });
+      });
+  } else {
+    res.render('signup', { errorMessage: 'Username and Password cannot be empty' });
   }
-  const salt = bcrypt.genSaltSync(saltRounds);
-  const hashPassword = bcrypt.hashSync(password, salt);
-  
-
 });
+
+
 
 
 module.exports = router;
