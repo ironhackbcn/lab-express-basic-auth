@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const flash = require('connect-flash');
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth-routes');
@@ -55,6 +56,9 @@ app.use(
     },
   }),
 );
+
+app.use(flash());
+
 app.use((req, res, next) => {
   app.locals.currentUser = req.session.currentUser;
   next();

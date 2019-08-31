@@ -12,40 +12,53 @@ const saltRounds = 10;
 
 const User = require('../models/user');
 
-const { isUserLoggedIn, isFFilled, isUserNoLoggedIn } = require('../MiddleWares/authMiddleWares');
+const {
+  isUserLoggedIn,
+  isFFilled,
+  isUserNoLoggedIn,
+} = require('../MiddleWares/authMiddleWares');
 
-router.get('/login', (req, res, next) => {
-  console.log('load log in form');
+router.get('/login', isUserLoggedIn, (req, res, next) => {
+  console.log("I'm in login");
   res.render('auth/login');
 });
 
-router.get('/signup', (req, res, next) => {
+router.get('/signup', isUserLoggedIn, (req, res, next) => {
   console.log('load sign up form');
   res.render('auth/signup');
 });
 
-router.post('/login', (req, res, next) => {
+router.post('/login',isUserLoggedIn, (req, res, next) => {
+  console.log('I enter in the login form');
   const { username, password } = req.body;
   if (username !== '' && password !== '') {
     User.findOne({ username })
       .then((user) => {
         if (user) {
+          console.log('user exist i will try now with the password');
           if (bcrypt.compareSync(password, user.hashedPassword)) {
+            console.log('all is correct');
             req.session.currentUser = user;
-            res.render('private');
+            res.redirect('/private');
           } else {
-            // password invalido
-            res.render('auth/login', { errorMessage: 'User Name or Password incorrect!!!' });
+            /* Invalid Password */
+            console.log('invalid password');
+            res.render('auth/login', {
+              errorMessage: 'User Name or Password incorrect!!!',
+            });
           }
         } else {
-          res.redirect('auth/signup');
+          console.log('I load de login web again and send a error message');
+          res.render('auth/login', { errorMessage: 'User Name or Password incorrect!!!' });
         }
       })
-      .catch(() => {
-        res.render('auth/login', { errorMessage: 'Tray Again' });
+      .catch((error) => {
+        next(error);
       });
   } else {
-    res.render('auth/login', { errorMessage: 'Username and password fields cannot be empty' });
+    res.render('auth/login', {
+      errorMessage: 'Username and password fields cannot be empty',
+    });
   }
 });
 
@@ -54,15 +67,17 @@ router.post('/signup', (req, res, next) => {
   const { username, password } = req.body;
   /* use salt because remains resistant to brute-force attacks */
   if (username !== '' && password !== '') {
-  /* Beguin looking for if the user exist */
+    /* Beguin looking for if the user exist */
     User.findOne({ username })
-    /* Try find a user if existe before creation */
+      /* Try find a user if existe before creation */
       .then((user) => {
         if (user) {
           console.log('User Exist in database');
-          res.render('auth/signup', { errorMessage: 'User already exists try with another username' });
+          res.render('auth/signup', {
+            errorMessage: 'User already exists try with another username',
+          });
         } else {
-          console.log('User doesn\'t no exist!!! I\'m going to create one');
+          console.log("User doesn't no exist!!! I'm going to create one");
           /* Here we hash de password and begin with layers salt */
           const salt = bcrypt.genSaltSync(saltRounds);
           const hashedPassword = bcrypt.hashSync(password, salt);
@@ -73,7 +88,7 @@ router.post('/signup', (req, res, next) => {
               res.redirect('../created');
             })
             .catch((error) => {
-              throw (error);
+              throw error;
             });
         }
       }) /* Here receive a posible error of the other catch */
@@ -81,7 +96,9 @@ router.post('/signup', (req, res, next) => {
         res.render('signup', { erroMessage: 'Error Tray again!!!' });
       });
   } else {
-    res.render('signup', { errorMessage: 'Username and Password cannot be empty' });
+    res.render('signup', {
+      errorMessage: 'Username and Password cannot be empty',
+    });
   }
 });
 

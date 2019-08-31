@@ -4,9 +4,14 @@
 
 const isUserLoggedIn = (req, res, next) => {
   if (req.session.currentUser) {
+    console.log('esto es lo que hay aqui', req.path);
+    if (req.path === '/login') res.redirect('/private');
+    if (req.path === '/signup') res.redirect('/private');
     next();
   } else {
-    res.redirect('auth/login');
+    if (req.path === '/private') res.redirect('/login');
+    if (req.path === '/created') res.redirect('/login');
+    res.redirect(req.path);
   }
 };
 
