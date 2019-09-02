@@ -23,7 +23,7 @@ router.get('/signup', (req, res, next) => {
   res.render('auth/signup');
 });
 
-router.post('/login', isNotFFilled, async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   console.log('I enter in the login form');
   const { username, password } = req.body;
   const user = await User.findOne({ username });
@@ -57,7 +57,7 @@ router.post('/signup', isNotFFilled, async (req, res, next) => {
     /* Beguin looking for if the user exist */
     const user = await User.findOne({ username });
     /* Try find a user if exist before creation */
-
+    
     if (user) {
       console.log('User Exist in database');
       req.flash('error', 'User already exists try with another username');
@@ -70,7 +70,7 @@ router.post('/signup', isNotFFilled, async (req, res, next) => {
       /* Create de user because is allright */
       await User.create({ username, hashedPassword });
       console.log(`User ${username} created`);
-      res.redirect('/created');
+      res.redirect('../created');
     }
   } catch (error) {
     /* Here receive a posible error of the other catch */
