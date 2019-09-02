@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -41,7 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //   }),
 // }));
 
-/*Improvement of the previous version*/
+/* Improvement of the previous version */
 app.use(
   session({
     store: new MongoStore({
