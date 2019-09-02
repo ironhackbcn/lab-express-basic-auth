@@ -6,13 +6,13 @@
 
   <label for="password">Password: </label>
   <input input="password" name="password" require>
-</form>
- {{#if errorMessage}}
-    <div class="error-message">{{ errorMessage }}</div>
+  {{#if errorMessage}}
+  <div class="error-message">{{ errorMessage }}</div>
   {{/if}}
   <p>
-  <button type="submit">login</button></p>
+    <button type="submit">login</button></p>
   <p class="account-message">
     Don't have an account? <a href="/signup">Sign up</a>
   </p>
   <p><a href="/">Go back</a></p>
+</form>
