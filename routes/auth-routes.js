@@ -79,23 +79,25 @@ router.post('/login', async (req, res, next) => {
 //   }
 // });
 
-// router.get('/private', (req, res, next) => {
-//   res.render('private');
-// });
+router.get('/private', (req, res, next) => {
+  const { username } = req.body;
+  req.flash('info', `Hello User ${username}`);
+  res.render('private');
+});
 
 // router.get('/created', (req, res, next) => {
 //   console.log('estoy en created');
 //   res.render('created');
 // });
 
-// router.get('/logout', (req, res, next) => {
-//   req.session.destroy((err) => {
-//     // cannot access session here
-//     if (err) {
-//       next(err);
-//     }
-//     res.redirect('/login');
-//   });
-// });
+router.get('/logout', (req, res, next) => {
+  req.session.destroy((err) => {
+    // cannot access session here
+    if (err) {
+      next(err);
+    }
+    res.redirect('/login');
+  });
+});
 
 module.exports = router;
