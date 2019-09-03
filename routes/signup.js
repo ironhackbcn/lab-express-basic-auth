@@ -10,20 +10,19 @@ router.get('/', (req, res, next) => {
 });
 
 /* POST what the user has entered */
-router.post("/", (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  const salt = bcrypt.genSaltSync(bcryptSalt);
-  const hashPass = bcrypt.hashSync(password, salt);
 
+router.post("/", (req, res, next) => {
+  const { username, password } = req.body;
+  const salt = bcrypt.genSaltSync(bcryptSalt);
+  const hashedPassword = bcrypt.hashSync(password, salt);  
   if (username === "" || password === "") {
     res.render("auth/signup", {
       errorMessage: "Indicate a username and a password to sign up"
     });
     return;
   } else {
-    User.findOne({ "username": username })
-      .then(user => {
+    User.findOne({ username })
+      .then((user) => {
         if (user !== null) {
           res.render("auth/signup", {
             errorMessage: "The username already exists!"
@@ -32,10 +31,10 @@ router.post("/", (req, res, next) => {
         } 
           User.create({
             username,
-            password: hashPass
+            password: hashedPassword
           })
             .then(() => {
-              res.redirect("/");
+              res.render("index");
             })
             .catch(error => {
               console.log(error);

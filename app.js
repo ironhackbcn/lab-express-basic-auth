@@ -7,26 +7,19 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const indexRouter = require('./routes/index');
-const authRouter = require('./routes/auth');
-const loginRouter = require('./routes/login');
-
-const app = express();
-
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
   useNewUrlParser: true,
+  useCreateIndex: true,
   reconnectTries: Number.MAX_VALUE
 });
 
-app.use(session({
-  secret: "basic-auth-secret",
-  cookie: { maxAge: 60000 },
-  store: new MongoStore({
-    mongooseConnection: mongoose.connection,
-    ttl: 24 * 60 * 60 // 1 day
-  })
-}));
+const indexRouter = require('./routes/index');
+const signupRouter = require('./routes/signup');
+const loginRouter = require('./routes/login');
+const secretRouter = require('./routes/secret');
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -37,28 +30,47 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/signup', authRouter);
+app.use(
+  session({
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 24 * 60 * 60, // 1 day
+    }),
+    secret: 'ironhack',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+// app.use((req, res, next) => {
+//   app.locals.currentUser = req.session.currentUser;
+//   next();
+// });
+// Rutas
+app.use('/signup', signupRouter);
 app.use('/login', loginRouter);
+app.use('/secret', secretRouter);
 app.use('/', indexRouter);
+
 
 // -- 404 and error handler
 
-// NOTE: requires a views/not-found.ejs template
 app.use((req, res, next) => {
-  res.status(404);
-  res.render('not-found');
+  next(createError(404));
 });
 
-// NOTE: requires a views/error.ejs template
+// error handler
 app.use((err, req, res, next) => {
-  // always log the error
-  console.error('ERROR', req.method, req.path, err);
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // only render if the error ocurred before sending the response
-  if (!res.headersSent) {
-    res.status(500);
-    res.render('error');
-  }
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 module.exports = app;
+
