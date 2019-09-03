@@ -85,7 +85,7 @@ router.post('/signup', isNotFFilled, async (req, res, next) => {
 router.get('/private', isUserLoggedIn, (req, res, next) => {
   const { username } = req.body;
   req.flash('info', `Hello User ${username}`);
-  res.render('/authorized/private');
+  res.render('authorized/private');
 });
 
 router.get('/created', (req, res, next) => {
@@ -95,7 +95,6 @@ router.get('/created', (req, res, next) => {
 
 router.get('/logout', (req, res, next) => {
   req.session.destroy((err) => {
-    // cannot access session here
     if (err) {
       next(err);
     }

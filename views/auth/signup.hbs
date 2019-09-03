@@ -1,10 +1,10 @@
 <h1>SING UP</H1>
 <form action="/signup" method="POST" id="form">
   <label for="username">User Name: </label>
-  <input input="text" name="username" require>
+  <input type="text" name="username" require>
 
   <label for="password">Password: </label>
-  <input input="password" name="password">
+  <input type="password" name="password">
   {{#if errorMessages}}
     <div class="error-message">{{errorMessages}}</div>
   {{/if}}

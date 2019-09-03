@@ -2,10 +2,10 @@
 
 <form action="/login" method="POST" id="form">
   <label for="username">User Name: </label>
-  <input input="text" name="username" require>
+  <input type="text" name="username" require>
 
   <label for="password">Password: </label>
-  <input input="password" name="password" require>
+  <input type="password" name="password" require>
   {{#if errorMessages}}
   <div class="error-message">{{ errorMessages }}</div>
   {{/if}}
