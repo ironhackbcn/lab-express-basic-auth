@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
@@ -11,6 +12,8 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const flash = require('connect-flash');
+const { notifications } = require('./MiddleWares/authMiddleWares'); 
+
 
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth-routes');
@@ -65,6 +68,7 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(notifications(app));
 app.use('/', indexRouter);
 app.use('/', authRouter);
 
