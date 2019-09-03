@@ -1,7 +1,7 @@
-/* eslint-disable no-trailing-spaces */
 /* eslint-disable linebreak-style */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
+
 const express = require('express');
 
 const router = express.Router();
@@ -12,7 +12,10 @@ const saltRounds = 10;
 
 const User = require('../models/user');
 
-const { isNotFFilled, isUserLoggedIn } = require('../MiddleWares/authMiddleWares'); 
+const {
+  isNotFFilled,
+  isUserLoggedIn,
+} = require('../MiddleWares/authMiddleWares');
 
 router.get('/login', (req, res, next) => {
   console.log("I'm in login");
@@ -34,16 +37,16 @@ router.post('/login', isNotFFilled, async (req, res, next) => {
       if (bcrypt.compareSync(password, user.hashedPassword)) {
         console.log('all is correct');
         req.session.currentUser = user;
-        res.redirect('private');
+        res.redirect('/private');
       } else {
         /* Invalid Password */
         console.log('invalid password');
-        req.flash('error', 'User Name or Password incorrect!!!'); 
+        req.flash('error', 'User Name or Password incorrect!!!');
         res.redirect('login');
       }
     } else {
-      console.log('The user doesn\'t exist');
-      req.flash('error', 'User Name or Password incorrect!!!'); 
+      console.log("The user doesn't exist");
+      req.flash('error', 'User Name or Password incorrect!!!');
       res.redirect('login');
     }
   } catch (error) {
@@ -61,7 +64,7 @@ router.post('/signup', isNotFFilled, async (req, res, next) => {
     if (user) {
       // console.log('User Exist in database');
       req.flash('error', 'User already exists try with another username');
-      res.redirect('signup'); 
+      res.redirect('signup');
     } else {
       // console.log("User doesn't no exist!!! I'm going to create one");
       /* Here we hash de password and begin with layers salt */
@@ -82,13 +85,12 @@ router.post('/signup', isNotFFilled, async (req, res, next) => {
 router.get('/private', isUserLoggedIn, (req, res, next) => {
   const { username } = req.body;
   req.flash('info', `Hello User ${username}`);
-  res.render('private');
+  res.render('/authorized/private');
 });
 
 router.get('/created', (req, res, next) => {
-  console.log('estoy en created');
   console.log('Name of user');
-  res.render('created', { info: req.body.username });
+  res.render('created');
 });
 
 router.get('/logout', (req, res, next) => {
