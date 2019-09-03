@@ -7,8 +7,8 @@ const isUserLoggedIn = (req, res, next) => {
   if (req.session.currentUser) {
     next();
   } else {
-    req.flash('error', 'You need to login to use stay here!!!');
-    res.redirect('auth/login');
+    req.flash('error', 'You need to login to stay here!!!');
+    res.redirect('login');
   }
 };
 
