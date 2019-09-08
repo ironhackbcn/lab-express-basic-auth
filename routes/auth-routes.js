@@ -57,16 +57,17 @@ router.post('/login', isNotFFilled, async (req, res, next) => {
 router.post('/signup', isNotFFilled, async (req, res, next) => {
   /* retrieves username and password */
   const { username, password } = req.body;
+  const user = await User.findOne({ username });
   try {
     /* Beguin looking for if the user exist */
-    const user = await User.findOne({ username });
+    
     /* Try find a user if exist before creation */
     if (user) {
       // console.log('User Exist in database');
       req.flash('error', 'User already exists try with another username');
       res.redirect('signup');
     } else {
-      // console.log("User doesn't no exist!!! I'm going to create one");
+      // console.log("User doesn't exist!!! I'm going to create one");
       /* Here we hash de password and begin with layers salt */
       const salt = bcrypt.genSaltSync(saltRounds);
       const hashedPassword = bcrypt.hashSync(password, salt);
