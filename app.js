@@ -1,19 +1,29 @@
+/* eslint-disable import/no-unresolved */
+/* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
+const session = require('express-session'); // crea la sesion
+const MongoStore = require('connect-mongo')(session);
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const flash = require('connect-flash');
+const { notifications } = require('./MiddleWares/authMiddleWares');
 
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth-routes');
 
 const app = express();
 
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
   useNewUrlParser: true,
-  reconnectTries: Number.MAX_VALUE
+  reconnectTries: Number.MAX_VALUE,
 });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -24,7 +34,31 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(
+  session({
+    store: new MongoStore({
+      mongooseConnection: mongoose.connection,
+      ttl: 24 * 60 * 60, // para mantener la sesion abieta 1 dia
+    }),
+    secret: 'ironhack',
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000,
+    },
+  }),
+);
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  app.locals.currentUser = req.session.currentUser;
+  next();
+});
+
+app.use(notifications(app));
 app.use('/', indexRouter);
+app.use('/', authRouter);
 
 // -- 404 and error handler
 
