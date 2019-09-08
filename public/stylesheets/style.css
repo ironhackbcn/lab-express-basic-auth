@@ -4,5 +4,26 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: #00b7ff;
+  text-decoration-line: none;
+
+}
+
+h1 {
+  color: #0b4d68;
+}
+.go-home a {
+  color: green;
+  padding: 5px 5px;
+  text-decoration-line: none;
+}
+
+.bttn-index a {
+  color: orange;
+  text-decoration-line: none;
+  padding: 10px;
+}
+
+.text {
+  color: #0b4d68;
 }
