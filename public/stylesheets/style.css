@@ -3,6 +3,11 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
+a, a:visited {
   color: #00B7FF;
+  text-decoration: none;
+}
+
+.error-message{
+  color:red;
 }
