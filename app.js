@@ -6,15 +6,19 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/basic-auth', {
+// Connect to database
+const app_name = require('./package.json').name;
+mongoose.connect(`mongodb://localhost/${app_name}`, {
   keepAlive: true,
   useNewUrlParser: true,
   useUnifiedTopology: true,
   reconnectTries: Number.MAX_VALUE
-});
+}).then(data => {console.log(`Connected to Mongo!: ${data.connections[0].name}`)
+}).catch(errpr => {console.log(error)});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -27,8 +31,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
-// -- 404 and error handler
+// 404 and error handler
 
 // NOTE: requires a views/not-found.ejs template
 app.use((req, res, next) => {
