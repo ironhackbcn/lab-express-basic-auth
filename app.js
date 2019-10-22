@@ -1,12 +1,15 @@
-const createError = require('http-errors');
-const express = require('express');
-const path = require('path');
+const createError  = require('http-errors');
+const express      = require('express');
+const path         = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
-const mongoose = require('mongoose');
+const logger       = require('morgan');
+const mongoose     = require('mongoose');
+const session      = require('express-session');
+const MongoStore   = require('connect-mongo')(session);
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const indexRouter   = require('./routes/index');
+const usersRouter   = require('./routes/users');
+const privateRouter = require('./routes/private');
 
 const app = express();
 
@@ -30,10 +33,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Session handler
+app.use(session({
+  secret: app_name + "-secret",
+  cookie: {maxAge: 60000},
+  resave: true,
+  saveUninitialized: true,
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24*60*60
+  })
+}));
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/private', privateRouter);
 
-// 404 and error handler
+/* 404 and error handlers */
 
 // NOTE: requires a views/not-found.ejs template
 app.use((req, res, next) => {
@@ -43,10 +59,10 @@ app.use((req, res, next) => {
 
 // NOTE: requires a views/error.ejs template
 app.use((err, req, res, next) => {
-  // always log the error
-  console.error('ERROR', req.method, req.path, err);
+  // Always log the error
+  console.error('Error: ', req.method, req.path, err);
 
-  // only render if the error ocurred before sending the response
+  // Only render if the error ocurred before sending the response
   if (!res.headersSent) {
     res.status(500);
     res.render('error');
