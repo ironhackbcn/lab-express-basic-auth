@@ -12,8 +12,10 @@ const app = express();
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
   useNewUrlParser: true,
+  useUnifiedTopology: true,
   reconnectTries: Number.MAX_VALUE
 });
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
