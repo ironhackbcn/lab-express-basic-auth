@@ -2,10 +2,13 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser')
 const logger = require('morgan');
 const mongoose = require('mongoose');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
-const indexRouter = require('./routes/index');
+
 
 const app = express();
 
@@ -24,7 +27,29 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//middleware
+//que hacen estas lineas mas alla de habilitar body-parser para su uso
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
+app.use(session({
+  secret: "basic-auth-secret",
+  cookie: { maxAge: 60000 },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
+
+//routes
+const indexRouter = require('./routes/index');
+const authSite = require('./routes/auth');
+const privateSite = require('./routes/private');
+
 app.use('/', indexRouter);
+app.use('/auth', authSite);
+app.use('/private', privateSite);
 
 // -- 404 and error handler
 
