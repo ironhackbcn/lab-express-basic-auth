@@ -1,8 +1,37 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding: 0px;
+  margin: 0px;
+  font: 16px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
-a {
-  color: #00B7FF;
+.body-container {
+  display: flex;
+}
+
+nav {
+  padding: 5px 20px 0px 5px;
+  width: 20%;
+  text-align: right;
+}
+
+nav a {
+  text-decoration: none;
+  color: darkslategray;
+}
+
+.nav-bar {
+  list-style-type: none;
+}
+
+.index {
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.btn {
+ border: 0px;
+ background-color: darkslateblue;
+ color: white;
+ padding: 8px 15px;
 }

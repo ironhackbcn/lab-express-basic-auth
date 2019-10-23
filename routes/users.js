@@ -40,20 +40,20 @@ router.get('/signin', (req, res, next) => {
 router.post('/signin', (req, res, next) => {
   const {username, password} = req.body;
   if (username === "" || password === "") {
-    res.render('users/signin', {error: 'Enter a username and password' });
+    res.render('users/signin', {error: 'You must enter a username and password' });
     return;
   }
   User.findOne({'username': username})
     .then(user => {
       if (!user) {
-        res.render('users/signin', {error: "Username doesn't exist"})
+        res.render('users/signin', {error: "That username doesn't exist"})
         return;
       }
       if (bcrypt.compareSync(password, user.password)) {
         req.session.currentUser = user;
         res.redirect('/');
       } else {
-        res.render('users/signin', {error: "Wrong password"})
+        res.render('users/signin', {error: "Incorrect password"})
       }
     })
     .catch(error => {console.log(error)});

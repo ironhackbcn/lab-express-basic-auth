@@ -21,7 +21,7 @@ mongoose.connect(`mongodb://localhost/${app_name}`, {
   useUnifiedTopology: true,
   reconnectTries: Number.MAX_VALUE
 }).then(data => {console.log(`Connected to Mongo!: ${data.connections[0].name}`)
-}).catch(errpr => {console.log(error)});
+}).catch(error => {console.log(error)});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
