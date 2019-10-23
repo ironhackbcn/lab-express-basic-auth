@@ -17,18 +17,7 @@ mongoose.connect('mongodb://localhost/basic-auth', {
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE
 });
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-
+//justo despues de conexion con mongoose poner el middleware de session sino no funciona
 // secret: Used to sign the session ID cookie (required)
 // cookie: Object for the session ID cookie. In this case, we only set the maxAge attribute, which configures the expiration date of the cookie (in milliseconds).
 // store: Sets the session store instance. In this case, we create a new instance of connect-mongo, so we can store the session information in our Mongo database.
@@ -41,6 +30,24 @@ app.use(session({
     ttl: 24 * 60 * 60 // 1 day
   })
 }));
+
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use('/', indexRouter);
+
+const usersRouter = require("./routes/site-routes")
+app.use('/user', usersRouter);
+
+
 
 // -- 404 and error handler
 
