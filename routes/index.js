@@ -6,4 +6,9 @@ router.get('/', (req, res, next) => {
   res.render('index', { title: 'Express' });
 });
 
+////////////////SECRET////////////////////
+//Route de secret:
+
+
+
 module.exports = router;

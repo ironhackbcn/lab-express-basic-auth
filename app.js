@@ -6,8 +6,16 @@ const logger = require('morgan');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth');
+const sitesRouter = require('./routes/site-routes');
+
+// 2 librerias necesarias para session /cookie => instalar!!!
+const session    = require("express-session");
+const MongoStore = require("connect-mongo")(session);
+
 
 const app = express();
+
 
 mongoose.connect('mongodb://localhost/basic-auth', {
   keepAlive: true,
@@ -24,7 +32,22 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//creamos la cookie session para saber si hay usuario ya logeado(poner antes de todas las rutas!!!!)
+app.use(session({
+  secret: "basic-auth-secret",
+  cookie: { maxAge: 60000 },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
+
+
 app.use('/', indexRouter);
+app.use('/auth', authRouter);
+app.use('/site', sitesRouter);
+
+
 
 // -- 404 and error handler
 
