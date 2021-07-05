@@ -7,13 +7,18 @@
     "start-dev": "nodemon ./bin/www"
   },
   "dependencies": {
-    "cookie-parser": "~1.4.3",
+    "bcrypt": "^3.0.8",
+    "connect-mongo": "^3.2.0",
+    "const": "^1.0.0",
+    "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
-    "express": "~4.16.0",
-    "hbs": "~4.0.1",
-    "http-errors": "~1.6.2",
-    "mongoose": "^5.4.12",
-    "morgan": "~1.9.0",
-    "nodemon": "^1.18.10"
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "hbs": "^4.0.6",
+    "http-errors": "^1.7.3",
+    "mongoose": "^5.9.9",
+    "morgan": "^1.10.0",
+    "nodemon": "^1.19.4",
+    "path": "^0.12.7"
   }
 }
