@@ -1,0 +1,23 @@
+<h1>Este es el sign up</h1>
+
+<form method="POST" action="/auth/signup">
+
+  <div class="field" >
+    <label>Username</label>
+    <input type="text" name="username" placeholder="insert username"/>
+  </div>
+
+  <div class="field" >
+    <label>Password</label>
+    <input type="password" name="password" placeholder="insert password"/>
+  </div>
+
+  <div class="field submit">
+    <button type="submit">Sign up</button>
+  </div>
+
+  {{#if messages.length}}
+    <ul class="validation">
+      {{#each messages}}<li>{{this}}</li>{{/each}}
+    </ul>
+  {{/if}}

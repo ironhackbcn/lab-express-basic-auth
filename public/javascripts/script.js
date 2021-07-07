@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
 const main = () => {
 
-};
+}
 
-window.addEventListener('load', main);
+window.addEventListener('load', main)
