@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,31 @@
   <title>{{title}}</title>
   <link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
+
 <body>
 
-  {{{body}}}
-
+  <nav>
+    <ul>
+      <li><a href="/main">Main</a></li>
+      <li><a href="/private">Private</a></li>
+    </ul>
+    <ul>
+      {{#if user}}
+      <li>
+        <form action="/auth/logout" method="POST">
+          <button type="submit" class="btn-logout">{{user.username}} Logout</button>
+        </form>
+      </li>
+      {{else}}
+      <li><a href="/auth/signup">Sign up</a></li>
+      <li><a href="/auth/login">Login</a></li>
+      {{/if}}
+    </ul>
+  </nav>
+  <div class="wrap">
+    {{{body}}}
+  </div>
   <script src="/javascripts/script.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="../stylesheets/signup.css">
+
+<div class="signup-container">
+    <h1>Signup</h1>
+    <form id="signup-form" action="/auth/signup" method="POST">
+        <label for="username">Username:</label>
+        <input class="error" required type="text" name="username">
+        <label for="password">Password:</label>
+        <input id="password" required type="password" name="password">
+        <a id="show-pw" class="link">Show password</a>
+        <p id="password-strenght">Week</p>
+        <div class="alerts">
+            {{#each  messages}}
+                <p style="color: red">{{this}}</p>
+            {{/each}}
+        </div>
+        <button type="submit">Create Account</button>
+        <p>Already have an account? <a class="link" href="/auth/login">Login</a></p>
+    </form>
+</div>
+
+<script src="/javascripts/show-pw.js"></script>
